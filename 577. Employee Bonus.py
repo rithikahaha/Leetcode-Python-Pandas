@@ -10,7 +10,6 @@
 
 ### Table: `Employee`
 
-```text id="4l0f2q"
 +-------------+---------+
 | Column Name | Type    |
 +-------------+---------+
@@ -26,7 +25,6 @@
 
 ### Table: `Bonus`
 
-```text id="bq7m5j"
 +-------------+------+
 | Column Name | Type |
 +-------------+------+
@@ -52,7 +50,6 @@ Return the result table in **any order**.
 
 ### Input
 
-```text id="4s1z0n"
 Employee table:
 +-------+--------+------------+--------+
 | empId | name   | supervisor | salary |
@@ -73,8 +70,6 @@ Bonus table:
 ```
 
 ### Output
-
-```text id="u6kqz5"
 +------+-------+
 | name | bonus |
 +------+-------+
@@ -94,8 +89,6 @@ Bonus table:
 ---
 
 # Pandas Solution
-
-```python id="v6p2qa"
 import pandas as pd
 
 def employee_bonus(employee: pd.DataFrame, bonus: pd.DataFrame) -> pd.DataFrame:
@@ -147,7 +140,6 @@ After the merge:
 
 ## Step 1: Filter the Required Employees
 
-```python id="s5c8xn"
 result = result[
     result['bonus'].isna() | (result['bonus'] < 1000)
 ]
@@ -157,7 +149,6 @@ There are two conditions.
 
 ### No Bonus
 
-```python id="n7q3pv"
 result['bonus'].isna()
 ```
 
@@ -167,7 +158,6 @@ These are employees who did not get a bonus.
 
 ### Bonus Less Than 1000
 
-```python id="w8r2cj"
 result['bonus'] < 1000
 ```
 
@@ -175,7 +165,6 @@ This identifies employees whose bonus is below `1000`.
 
 ### Combine the Conditions
 
-```python id="z4m6kh"
 result['bonus'].isna() | (result['bonus'] < 1000)
 ```
 
@@ -193,7 +182,6 @@ Bonus < 1000
 
 ## Step 2: Select the Required Columns
 
-```python id="h3v9qs"
 return result[['name', 'bonus']]
 ```
 
@@ -207,7 +195,6 @@ The problem only asks for the employee's `name` and `bonus`.
 
 This problem uses the same common pattern as finding customers with no orders:
 
-```python id="q7p3wd"
 pd.merge(
     employee,
     bonus,
@@ -218,7 +205,6 @@ pd.merge(
 
 A left merge preserves every employee. Employees without a matching bonus receive `NaN`, which can then be identified using:
 
-```python id="r2n8vc"
 result['bonus'].isna()
 ```
 
@@ -226,13 +212,11 @@ result['bonus'].isna()
 
 Pandas uses `|` for element-wise OR:
 
-```python id="j5x4mz"
 condition1 | condition2
 ```
 
 Parentheses are required around individual comparisons:
 
-```python id="c8v1ks"
 result['bonus'].isna() | (result['bonus'] < 1000)
 ```
 
@@ -240,7 +224,6 @@ result['bonus'].isna() | (result['bonus'] < 1000)
 
 # SQL Equivalent
 
-```sql id="x6t3pn"
 SELECT
     e.name,
     b.bonus
@@ -270,7 +253,6 @@ WHERE b.bonus < 1000
 
 ### 1. Using an Inner Merge
 
-```python id="s2k6vp"
 how='inner'
 ```
 
@@ -278,7 +260,6 @@ would remove employees without a bonus before we can identify them.
 
 We need:
 
-```python id="a7f3hx"
 how='left'
 ```
 
@@ -286,7 +267,6 @@ to preserve all employees.
 
 ### 2. Checking Only `bonus < 1000`
 
-```python id="m9w4kc"
 result[result['bonus'] < 1000]
 ```
 
@@ -294,7 +274,6 @@ would exclude employees with no bonus because `NaN < 1000` is not `True`.
 
 We must explicitly include missing bonuses:
 
-```python id="x4q8nd"
 result['bonus'].isna() | (result['bonus'] < 1000)
 ```
 
@@ -302,7 +281,6 @@ result['bonus'].isna() | (result['bonus'] < 1000)
 
 Don't write:
 
-```python id="v6t1rx"
 result['bonus'].isna() or (result['bonus'] < 1000)
 ```
 
@@ -314,7 +292,6 @@ Pandas requires `|` for element-wise OR.
 
 The core pattern is:
 
-```text id="p7c2mw"
 Left merge employees with bonuses
         ↓
 Employees without bonuses → NaN
