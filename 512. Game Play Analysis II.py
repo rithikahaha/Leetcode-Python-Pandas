@@ -10,7 +10,6 @@
 
 ### Table: `Activity`
 
-```text
 +--------------+---------+
 | Column Name  | Type    |
 +--------------+---------+
@@ -35,7 +34,6 @@ Return the result table in **any order**.
 
 ### Input
 
-```text
 Activity table:
 +-----------+-----------+------------+--------------+
 | player_id | device_id | event_date | games_played |
@@ -50,7 +48,6 @@ Activity table:
 
 ### Output
 
-```text
 +-----------+-----------+
 | player_id | device_id |
 +-----------+-----------+
@@ -70,7 +67,6 @@ Activity table:
 
 # Pandas Solution
 
-```python
 import pandas as pd
 
 def game_play_analysis(activity: pd.DataFrame) -> pd.DataFrame:
@@ -93,7 +89,6 @@ Unlike LeetCode 511, where we only needed the first date, this problem also requ
 
 ## Step 1: Find Each Player's First Login Date
 
-```python
 first_login = activity.groupby('player_id')['event_date'].transform('min')
 ```
 
@@ -113,8 +108,7 @@ This produces values like:
 ---
 
 ## Step 2: Keep the First-Login Rows
-
-```python
+    
 result = activity[
     activity['event_date'] == first_login
 ]
@@ -134,7 +128,6 @@ Only the first-login rows remain:
 
 ## Step 3: Select the Required Columns
 
-```python
 return result[['player_id', 'device_id']]
 ```
 
@@ -146,7 +139,6 @@ The problem only requires `player_id` and `device_id`.
 
 ### `groupby() + transform()`
 
-```python
 activity.groupby('player_id')['event_date'].transform('min')
 ```
 
@@ -160,7 +152,6 @@ This allows the calculated first-login date to be compared directly with the ori
 
 This:
 
-```python
 activity.groupby('player_id')['event_date'].min()
 ```
 
@@ -170,7 +161,6 @@ That works for finding the first date, but we also need the `device_id` from the
 
 ### Boolean Filtering
 
-```python
 activity['event_date'] == first_login
 ```
 
@@ -180,7 +170,6 @@ creates a Boolean condition that identifies the rows occurring on each player's 
 
 # SQL Equivalent
 
-```sql
 SELECT
     player_id,
     device_id
@@ -249,13 +238,10 @@ not:
 ['player_id', 'device_id']
 ```
 
----
-
 # Key Takeaway
 
 The core pattern is:
 
-```text
 Group by player
     ↓
 Find minimum date with transform()
@@ -265,6 +251,5 @@ Compare with original dates
 Keep first-login rows
     ↓
 Return player_id + device_id
-```
 
 > **Use `groupby().transform()` when you need a group-level calculation while keeping the original rows available for filtering or retrieving other columns.**
