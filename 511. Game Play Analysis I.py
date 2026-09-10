@@ -10,7 +10,6 @@
 
 ### Table: `Activity`
 
-```text
 +--------------+---------+
 | Column Name  | Type    |
 +--------------+---------+
@@ -35,7 +34,6 @@ Return the result table in **any order**.
 
 ### Input
 
-```text
 Activity table:
 +-----------+-----------+------------+--------------+
 | player_id | device_id | event_date | games_played |
@@ -50,7 +48,6 @@ Activity table:
 
 ### Output
 
-```text
 +-----------+-------------+
 | player_id | first_login |
 +-----------+-------------+
@@ -72,7 +69,6 @@ For each player, find the earliest `event_date`:
 
 # Pandas Solution
 
-```python
 import pandas as pd
 
 def game_play_analysis(activity: pd.DataFrame) -> pd.DataFrame:
@@ -93,14 +89,12 @@ We need to find the **minimum login date for each player**.
 
 The combination of `groupby()` and `min()` directly matches the SQL logic of:
 
-```sql
 GROUP BY player_id
 MIN(event_date)
 ```
 
 ## Step 1: Group by Player
 
-```python
 activity.groupby('player_id')['event_date']
 ```
 
@@ -108,7 +102,6 @@ This groups all activity records belonging to the same player and selects the `e
 
 For example:
 
-```text
 Player 1 → 2016-03-01, 2016-05-02
 Player 2 → 2017-06-25
 Player 3 → 2016-03-02, 2018-07-03
@@ -116,7 +109,6 @@ Player 3 → 2016-03-02, 2018-07-03
 
 ## Step 2: Find the Earliest Date
 
-```python
 .min()
 ```
 
@@ -132,7 +124,6 @@ This gives:
 
 ## Step 3: Convert the Result to a DataFrame
 
-```python
 .reset_index(name='first_login')
 ```
 
@@ -146,13 +137,11 @@ This gives:
 
 This is a common pattern for finding the minimum value within each group:
 
-```python
 df.groupby('group_column')['value_column'].min()
 ```
 
 Here:
 
-```python
 activity.groupby('player_id')['event_date'].min()
 ```
 
@@ -164,7 +153,6 @@ means:
 
 After `groupby()`, the grouping column becomes the index.
 
-```python
 .reset_index(name='first_login')
 ```
 
@@ -174,7 +162,6 @@ turns it back into a regular column and gives the aggregated column its required
 
 # SQL Equivalent
 
-```sql
 SELECT
     player_id,
     MIN(event_date) AS first_login
@@ -194,7 +181,6 @@ GROUP BY player_id;
 
 ### 1. Using `MAX()` Instead of `MIN()`
 
-```python
 activity.groupby('player_id')['event_date'].max()
 ```
 
@@ -202,7 +188,6 @@ would return the **last** login date.
 
 The problem asks for the **first**, so use:
 
-```python
 .min()
 ```
 
@@ -210,13 +195,11 @@ The problem asks for the **first**, so use:
 
 A player can use multiple devices, so the grouping should be based only on:
 
-```python
 'player_id'
 ```
 
 not:
 
-```python
 ['player_id', 'device_id']
 ```
 
@@ -224,7 +207,6 @@ not:
 
 Simply using:
 
-```python
 activity['event_date'].min()
 ```
 
@@ -236,7 +218,6 @@ would return one earliest date for the **entire DataFrame**, rather than one dat
 
 The core pattern is:
 
-```text
 Group by player
     ↓
 Find minimum event_date
