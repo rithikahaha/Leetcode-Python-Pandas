@@ -2,7 +2,7 @@
 LeetCode: https://leetcode.com/problems/second-highest-salary/ · Medium
 
 ## Problem
-Return the second highest **distinct** salary from `Employee(id, salary)`. If it doesn't exist, return null.
+Return the second highest **distinct** salary from `Employee(id, salary)`, or null if it doesn't exist.
 
 ## Solution
 ```python
@@ -14,7 +14,7 @@ def second_highest_salary(employee: pd.DataFrame) -> pd.DataFrame:
     return pd.DataFrame({'SecondHighestSalary': [second]})
 ```
 
-Drop duplicates before sorting, otherwise a repeated top salary (say two people tied for the max) would push the real second-highest out of position. Sorting descending puts the highest salary at `iloc[0]`, so the second-highest sits at `iloc[1]`. Guard that access with `len(salaries) > 1`, since indexing into an empty or single-row Series throws. The output also has to be a one-row, one-column DataFrame rather than a bare scalar, hence the `pd.DataFrame({...: [second]})` wrapper.
+Dedup before sorting so a tied top salary can't crowd out the real second place, then sort descending and take `iloc[1]`. Fall back to `None` when there are fewer than two distinct salaries.
 
 SQL equivalent:
 ```sql
