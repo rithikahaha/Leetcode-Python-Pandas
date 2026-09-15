@@ -4,6 +4,24 @@ LeetCode: https://leetcode.com/problems/second-highest-salary/ · Medium
 ## Problem
 Return the second highest **distinct** salary from `Employee(id, salary)`, or null if it doesn't exist.
 
+**Employee**
+| Column | Type | Notes |
+|---|---|---|
+| id | int | primary key |
+| salary | int | |
+
+**Example 1**
+```
+Employee: (1, 100), (2, 200), (3, 300)
+Output: SecondHighestSalary = 200
+```
+
+**Example 2**
+```
+Employee: (1, 100)
+Output: SecondHighestSalary = null   (only one distinct salary exists)
+```
+
 ## Solution
 ```python
 import pandas as pd
