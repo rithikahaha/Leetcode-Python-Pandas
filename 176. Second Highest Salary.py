@@ -14,7 +14,7 @@ def second_highest_salary(employee: pd.DataFrame) -> pd.DataFrame:
     return pd.DataFrame({'SecondHighestSalary': [second]})
 ```
 
-Dedup before sorting so a tied top salary can't crowd out the real second place, then sort descending and take `iloc[1]`. Fall back to `None` when there are fewer than two distinct salaries.
+Dedup before sorting, otherwise a tied top salary crowds out the real second place.
 
 SQL equivalent:
 ```sql
